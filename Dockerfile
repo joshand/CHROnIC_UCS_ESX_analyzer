@@ -11,6 +11,8 @@ RUN pip install -r requirements
 COPY . CHROnIC_UCS_ESX_analyzer
 WORKDIR CHROnIC_UCS_ESX_analyzer
 
+RUN populateDB.py
+
 EXPOSE 5000
 
 CMD app.py
