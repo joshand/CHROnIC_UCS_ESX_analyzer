@@ -6,10 +6,10 @@ RUN apt-get update && apt-get -y install \
   python-pip
 
 RUN pip install --upgrade
-RUN pip install -r requirements
 
 COPY . CHROnIC_UCS_ESX_analyzer
 WORKDIR CHROnIC_UCS_ESX_analyzer
+RUN pip install -r requirements
 
 RUN populateDB.py
 
