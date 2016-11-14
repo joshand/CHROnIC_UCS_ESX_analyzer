@@ -1,0 +1,1 @@
+{"_default": {"2": {"ID": "8,31", "pid": "UCSB-B200-M3", "objtype": "servermodel", "server_type": "B", "SERVER_MODEL": "Cisco UCS B200 M3"}, "3": {"ID": "13", "PROCESSOR": "Intel Xeon E5-2600 Series processors", "objtype": "processor", "pid": "UCS-CPU-E5-2680"}}}
