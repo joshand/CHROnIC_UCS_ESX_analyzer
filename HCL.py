@@ -269,6 +269,10 @@ def hclSearch(serverType_ID, serverModel_ID, processor_ID, osVendor_ID, osVersio
 
     return response
 
+def lookupByPID(adapter_pid):
+    info = piddb.search(item.pid == adapter_pid)[0]
+    return info
+
 #DB Build Process
 #buildServerTypesTable()
 #buildServerModelTable()
