@@ -217,15 +217,14 @@ def buildProcessorsTable():
             checkThenInsert(processor)
     return
 
-def getProcessor(T_ID, pid):
-    cpu = piddb.search(item.pid == pid)[0]
+def getProcessor(T_ID, PROCESSOR):
     url = 'http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadProcessors'
     headers = {'content-type': "application/x-www-form-urlencoded",}
     payload = "treeIdServerModel={}".format(T_ID)
     processors = requests.request("POST", url, data=payload, headers=headers).json()
 
     for processor in processors:
-        if processor['ID'] == cpu['ID']:
+        if processor['PROCESSOR'] == PROCESSOR:
             return processor
     return
 
