@@ -5,7 +5,6 @@ from tinydb import TinyDB, Query
 from HCL import getServerType_PID, getServerType, getServerModel, getProcessor, getOSVendor, getOSVersion, getFirmware
 from HCL import hclSearch, lookupByPID
 import pprint
-import re
 from flask_api import FlaskAPI
 from flask import request
 import requests
@@ -17,6 +16,8 @@ app = FlaskAPI(__name__)
 
 piddb = TinyDB('piddb.json')
 item = Query()
+
+
 
 
 def server_merge(ucs_list, esx_list):
@@ -202,7 +203,7 @@ def writeToBus(checked_servers, channelid):
 
 
 
-    url = "http://imapex-chronic-bus.green.browndogtech.com/api/send/{0}-{1}".format(newchannelid_base, count)
+    url = "http://imapex-chronic-bus.green.browndogtech.com/api/send/{0}-{1}".format(newchannelid_base, str(count))
 
     headers = {
         'content-type': "application/json",
@@ -212,26 +213,32 @@ def writeToBus(checked_servers, channelid):
     payload = {
         "msgdata": checked_servers,
         "desc": "finished HCL report",
-        "status": "3"}
+        "status": "2"}
 
     response = requests.request("POST", url, data=json.dumps(payload), headers=headers)
     print(response)
     return
 
-@app.route("/", methods=['POST'])
+@app.route("/")
+def hc():
+    return("Healthy")
+
+@app.route("/api/", methods=['POST'])
 def main():
     channelid = request.data['channelid']
     formatted_servers = collectServerInfo(channelid)
     servers = server_merge(formatted_servers['ucs_servers'], formatted_servers['esx_servers'])
     checked_servers = hclCheck(servers)
     pprint.pprint(checked_servers)
-    #writeToBus(checked_servers, channelid)
+    writeToBus(checked_servers, channelid)
 
 
-    return ("Complete " + channelid)
+    return (checked_servers)
 
 
 #main('h86eK4Ds')
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
