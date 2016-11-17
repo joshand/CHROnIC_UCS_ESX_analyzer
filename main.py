@@ -223,9 +223,9 @@ def writeToBus(checked_servers, channelid):
 def hc():
     return("Healthy")
 
-@app.route("/api/", methods=['POST'])
-def main():
-    channelid = request.data['channelid']
+@app.route("/api/<channelid>", methods=['GET'])
+def main(channelid):
+    #channelid = request.data['channelid']
     formatted_servers = collectServerInfo(channelid)
     servers = server_merge(formatted_servers['ucs_servers'], formatted_servers['esx_servers'])
     checked_servers = hclCheck(servers)
