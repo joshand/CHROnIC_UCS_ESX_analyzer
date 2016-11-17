@@ -1,3 +1,5 @@
 tinydb
 requests
 colorama
+Flask
+Flask_api

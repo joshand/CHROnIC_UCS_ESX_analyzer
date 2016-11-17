@@ -8,7 +8,6 @@ import pprint
 import re
 from flask_api import FlaskAPI
 from flask import request
-import markdown
 import requests
 import json
 import ast
