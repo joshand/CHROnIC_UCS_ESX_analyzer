@@ -171,7 +171,7 @@ def hclCheck(servers):
 
 def collectServerInfo(channelid):
     ##TODO
-    url = "http://imapex-chronic-bus.green.browndogtech.com/api/get/{}/force".format(channelid)
+    url = "http://imapex-chronic-bus.green.browndogtech.com/api/get/{}/2".format(channelid)
 
     headers = {
         'cache-control': "no-cache",
@@ -222,10 +222,10 @@ def writeToBus(checked_servers, channelid):
 @app.route("/", methods=['POST'])
 def main():
     channelid = request.data['channelid']
-    #formatted_servers = collectServerInfo(channelid)
-    #servers = server_merge(formatted_servers['ucs_servers'], formatted_servers['esx_servers'])
-    #checked_servers = hclCheck(servers)
-    #pprint.pprint(checked_servers)
+    formatted_servers = collectServerInfo(channelid)
+    servers = server_merge(formatted_servers['ucs_servers'], formatted_servers['esx_servers'])
+    checked_servers = hclCheck(servers)
+    pprint.pprint(checked_servers)
     #writeToBus(checked_servers, channelid)
 
 

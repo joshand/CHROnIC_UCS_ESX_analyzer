@@ -6,7 +6,7 @@ build:
 
 publish:
     docker:
-        repo: $$DOCKER_USERNAME/chronic_ucs_esx_analyzer
+        repo: $$DOCKER_USERNAME/chronic-ucs-esx-analyzer
         tag: latest
         username: $$DOCKER_USERNAME
         password: $$DOCKER_PASSWORD
@@ -21,7 +21,7 @@ deploy:
             username: $$MANTL_USERNAME
             password: $$MANTL_PASSWORD
         urls:
-            - https://$$MANTL_CONTROL/marathon/v2/apps/chapeter/chronic_ucs_esx_analyzer/restart?force=true
+            - https://$$MANTL_CONTROL/marathon/v2/apps/imapex/chronic/ucs-esx-analyzer/restart?force=true
 
 notify:
     spark:
