@@ -24,6 +24,7 @@ def server_merge(ucs_list, esx_list):
     servers = []
     count = 0
     for esx in esx_list:
+        print(esx['driverinfo'])
         esx_ident_list = esx['otherIdentifyingInfo/identifierValue/~']
         for id in esx_ident_list:
             for ucs in ucs_list:
@@ -153,7 +154,6 @@ def hclCheck(servers):
         print(server['supported_enic'])
         print(server['supported_fnic'])
 
-
         enic = buildHCL_enic_number(server['esx']['driverinfo'][3])
         fnic = buildHCL_fnic_number(server['esx']['driverinfo'][1])
         if enic == server['supported_enic']:
@@ -187,6 +187,7 @@ def collectServerInfo(channelid):
             ucs_servers = msgresp['ucs']
         elif 'vcenter' in msgresp.keys():
             esx_servers = msgresp['vcenter']
+
 
     return({'ucs_servers':ucs_servers, 'esx_servers':esx_servers})
 
@@ -233,7 +234,7 @@ def main(channelid):
     writeToBus(checked_servers, channelid)
 
 
-    return (checked_servers)
+    return
 
 
 #main('h86eK4Ds')
