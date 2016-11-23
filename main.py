@@ -10,12 +10,14 @@ from flask import request
 import requests
 import json
 import ast
+import os
 
 app = FlaskAPI(__name__)
 
 
 piddb = TinyDB('piddb.json')
 item = Query()
+busbaseurl = os.environ['CHRONICBUS']
 
 
 
@@ -84,11 +86,6 @@ def buildHCL_fnic_number(fnic):
     return fnic_version
 
 
-
-
-#for server in servers:
-#    osvendor_name = (server['fullName/~'][0].split()[0])
-#    print(buildHCL_os_version(server['fullName/~'][0]))
 
 
 def hclCheck(servers):
@@ -171,8 +168,8 @@ def hclCheck(servers):
 
 def collectServerInfo(channelid):
     ##TODO
-    url = "http://imapex-chronic-bus.green.browndogtech.com/api/get/{}/2".format(channelid)
-
+    #url = "http://imapex-chronic-bus.green.browndogtech.com/api/get/{}/2".format(channelid)
+    url = busbaseurl + "/api/get/{}/2".format(channelid)
     headers = {
         'cache-control': "no-cache",
     }
@@ -194,7 +191,8 @@ def collectServerInfo(channelid):
 
 def writeToBus(checked_servers, channelid):
     newchannelid_base = channelid + "-report"
-    url = "http://imapex-chronic-bus.green.browndogtech.com/api/get"
+    #url = "http://imapex-chronic-bus.green.browndogtech.com/api/get"
+    url = busbaseurl + "/api/get"
     response = requests.request("GET", url).json()
 
     count = 0

@@ -1,90 +1,56 @@
-# boilerplate - Hello World
+# CHROnIC UCS ESX Analyzer (UEA)
 
-Any applicable badges (build/documentation/collaboration/licenses should go here
+Cisco Health Reports and Online Information Center is a plug-able web app to help visualize and maintain device's support by providing various health reports.
 
-# Description
+CHROnIC UCS ESX Analyzer uses information collected from CHROnIC Collector to determine if a UCS system is in compliance with Cisco's HCL
 
-Boilerplate is a starting point application for the IMAPEX team @ Cisco.
-
+## Example Report
+![](images/example_report.png)
 
 # Installation
 
+CHROnIC UCS ESX Analyzer is built in Python 3.5 and is packaged with a Dockerfile for easy builds and deployments
+
 ## Environment
 
-Prerequisites
+CHROnIC UCS ESX Analyzer expects the following environment variables to be set:
 
-* Python 2.7+
-* [setuptools package](https://pypi.python.org/pypi/setuptools)
+CHRONICBUS needs to point to the CHROnIC Bus instance's base URL
+```
+CHRONICBUS
+```
+
+HCL needs to point to one of Cisco's HCL tool URL's.  ex: http://ucshcltool.cloudapps.cisco.com/public/rest
+```
+HCL
+```
+
 
 ## Downloading
 
-Provide instructions for how to obtain the software from this repository, if there are multiple options - please include
-as many as possible
-
-Option A:
-
-If you have git installed, clone the repository
-
-    git clone https://github.com/imapex/boilerplate
-
-Option B:
-
-If you don't have git, [download a zip copy of the repository](https://github.com/imapex/boilerplate/archive/master.zip)
-and extract.
-
-Option C:
-
-The latest build of this project is also available as a Docker image from Docker Hub
-
-    docker pull username/image:tag
-
-## Installing
-
-Provide instructions on how to install / use the application
+```
+docker pull chapeter/chronic-ucs-esx-analyzer
+```
 
 # Usage
 
-Provide any relevant code samples / CLI's to leverage the code
+```
+docker run -d -e "CHRONICBUS=<url>" -e "HCL=<url>" chapeter/chronic-ucs-esx-analyzer
+```
 
-    python app.py
+# Compatibility
 
+Currently CHROnIC UCS ESX Analyzer needs some manual translations to be setup to work between UCS and the Cisco HCL tool.  These bindings live in a TinyDB file of piddb.json .  Items can be added at anytime by editing that database
 
-# Development
+Supported Servers:
+* UCS B200 M3
 
-Provide any notes for other contributors.  This includes how to run tests / etc
+Supported CPU's:
+* E5-2600 v1
+* E5-2600 v2
 
+Supported Adapters:
+* VIC 1240
 
-## Linting
-
-We use flake 8 to lint our code. Please keep the repository clean by running:
-
-    flake8
-
-## Testing
-
-The IMAPEX team should attempt to have unittests with  100% code coverage. An example test suite is contained
-within the tests.py file for the boilerplate application
-
-The tests are can be run in the following ways::
-
-    python tests.py
-
-
-When adding additional code or making changes to the project, please ensure that unit tests are added to cover the
-new functionality and that the entire test suite is run against the project before submitting the code.
-Minimal code coverage can be verified using tools such as coverage.py.
-
-For instance, after installing coverage.py, the toolkit can be run with the command::
-
-    coverage run tests.py
-
-and an HTML report of the code coverage can be generated with the command::
-
-    coverage html
-
-
-# License
-
-Include any applicable licenses here as well as LICENSE.TXT in the root of the repository
-
-CHAPETER-M-V072:CROnIC-UCS-ESX-Matrix chapeter$
+Supported OS:
+* VMware ESX (unknown if update versions run correctly)

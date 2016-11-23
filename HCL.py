@@ -1,22 +1,14 @@
 import requests
 from tinydb import TinyDB, Query
 from colorama import init, Fore, Back
+import os
 
 db = TinyDB('testdb.json')
 piddb = TinyDB('piddb.json')
 item = Query()
 init(autoreset=True)
 
-#Todo list:
-#serverType_ID - Complete
-#serverModel_ID - Complete
-#processor_ID
-#TODO osVendor_ID
-#todo osVersion_ID
-#todo firmwareVersion_ID
-#todo manageType
-#todo adapterType_ID
-#todo adapterModel_ID
+hclbaseurl = os.environ['HCL']
 
 def checkThenInsert(i):
     """
@@ -34,7 +26,9 @@ def getAdapterType():
     This method is a base build method to populate all possible adapters.  This method returns the base adapter
     type to be fed into the buildAdapterType function.
     '''
-    url = "http://ucshcltool.cloudapps.cisco.com/public/rest/controller/loadAdapterTypes"
+    #url = "http://ucshcltool.cloudapps.cisco.com/public/rest/controller/loadAdapterTypes"
+    url = hclbaseurl + "/controller/loadAdapterTypes"
+
     response = requests.request("POST", url).json()
     return response
 
@@ -54,7 +48,9 @@ def buildAdapterModel(treeIdAdapterType):
     This function queries the HCL for a given adapter type.  The return is a list of all adapter models.
     These are then stored in the db
     '''
-    url = "http://ucshcltool.cloudapps.cisco.com/public/rest/controller/loadAdapterModels"
+    #url = "http://ucshcltool.cloudapps.cisco.com/public/rest/controller/loadAdapterModels"
+    url = hclbaseurl + "/controller/loadAdapterModels"
+
     payload = "treeIdAdapterType={}".format(treeIdAdapterType)
     headers = {'content-type': "application/x-www-form-urlencoded"}
     response = requests.request("POST", url, data=payload, headers=headers).json()
@@ -79,7 +75,8 @@ def buildOSVenderTable():
     This funciton returns back all OS vendor objects
     '''
     processors = db.search(item.otype == 'processor')
-    url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadOsVendors"
+    #url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadOsVendors"
+    url = hclbaseurl + "/server/loadOsVendors"
     headers = {
         'content-type': "application/x-www-form-urlencoded",
     }
@@ -92,7 +89,8 @@ def buildOSVenderTable():
     return
 
 def getOSVendor(T_ID, reported_os_vendor):
-    url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadOsVendors"
+    #url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadOsVendors"
+    url = hclbaseurl + "/server/loadOsVendors"
 
     payload = "treeIdProcessor={}".format(T_ID)
     headers = {
@@ -114,7 +112,8 @@ def buildOSVersions(treeIdVendor):
     '''
     This funciton gets all OS Versions given an OS Vendor T_ID and stores them in the DB
     '''
-    url = "http://ucshcltool.cloudapps.cisco.com/public/rest/controller/loadOsVersions"
+    #url = "http://ucshcltool.cloudapps.cisco.com/public/rest/controller/loadOsVersions"
+    url = hclbaseurl + "/controller/loadOsVersions"
 
     payload = "treeIdVendor={}".format(treeIdVendor)
     headers = {
@@ -127,7 +126,8 @@ def buildOSVersions(treeIdVendor):
     return
 
 def getOSVersion(T_ID, reported_version):
-    url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadOsVersions"
+    #url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadOsVersions"
+    url = hclbaseurl + "/server/loadOsVersions"
 
     payload = "treeIdVendor={}".format(T_ID)
     headers = {
@@ -152,7 +152,9 @@ def buildOSVersionTable():
     return
 
 def getServerTypes():
-    url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadServerTypes"
+    #url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadServerTypes"
+    url = hclbaseurl + "/server/loadServerTypes"
+
     response = requests.request("POST", url).json()
     return response
 
@@ -171,7 +173,9 @@ def buildServerTypesTable():
     return
 
 def getServerModels(treeIdRelease):
-    url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadServerModels"
+    #url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadServerModels"
+    url = hclbaseurl + "/server/loadServerModels"
+
     payload = "treeIdRelease={}".format(treeIdRelease)
     headers = {
     'content-type': "application/x-www-form-urlencoded",
@@ -205,7 +209,9 @@ def buildServerModelTable():
 
 def buildProcessorsTable():
     server_models = db.search(item.otype == 'servermodel')
-    url = 'http://ucshcltool-dev.cloudapps.cisco.com/public/rest/server/loadProcessors'
+    #url = 'http://ucshcltool-dev.cloudapps.cisco.com/public/rest/server/loadProcessors'
+    url = hclbaseurl + "/server/loadProcessors"
+
     headers = {'content-type': "application/x-www-form-urlencoded",}
 
     for server in server_models:
@@ -218,7 +224,9 @@ def buildProcessorsTable():
     return
 
 def getProcessor(T_ID, PROCESSOR):
-    url = 'http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadProcessors'
+    #url = 'http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadProcessors'
+    url = hclbaseurl + "/server/loadProcessors"
+
     headers = {'content-type': "application/x-www-form-urlencoded",}
     payload = "treeIdServerModel={}".format(T_ID)
     processors = requests.request("POST", url, data=payload, headers=headers).json()
@@ -229,7 +237,8 @@ def getProcessor(T_ID, PROCESSOR):
     return
 
 def getFirmware(T_ID, reported_firmware):
-    url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadFirmwareVersions"
+    #url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadFirmwareVersions"
+    url = hclbaseurl + "/server/loadFirmwareVersions"
 
     payload = "treeIdOSVersion={}".format(T_ID)
     headers = {
@@ -254,7 +263,8 @@ def getServerType_PID(pid):
 
 def hclSearch(serverType_ID, serverModel_ID, processor_ID, osVendor_ID, osVersion_ID,
                  firmwareVersion_ID, manageType):
-    url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadSearchResults"
+    #url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadSearchResults"
+    url = hclbaseurl + "/server/loadSearchResults"
 
     payload = "serverType_ID={0}&serverModel_ID={1}%2C31&processor_ID={2}&osVendor_ID={3}&osVersion_ID={4}&" \
               "firmwareVersion_ID={5}&manageType={6}".format(
