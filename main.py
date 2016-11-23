@@ -195,14 +195,18 @@ def writeToBus(checked_servers, channelid):
     url = busbaseurl + "/api/get"
     response = requests.request("GET", url).json()
 
+    print("Counting Reports")
     count = 0
     for channel in response.keys():
         if channelid in channel:
             count = count + 1
+    print("Found {} Reports".format(count))
 
 
+    #url = "http://imapex-chronic-bus.green.browndogtech.com/api/send/{0}-{1}".format(newchannelid_base, str(count))
+    url = busbaseurl + "/api/send/{0}-{1}".format(newchannelid_base, str(count))
 
-    url = "http://imapex-chronic-bus.green.browndogtech.com/api/send/{0}-{1}".format(newchannelid_base, str(count))
+    print("Posting to {}".format(url))
 
     headers = {
         'content-type': "application/json",
@@ -229,10 +233,11 @@ def main(channelid):
     servers = server_merge(formatted_servers['ucs_servers'], formatted_servers['esx_servers'])
     checked_servers = hclCheck(servers)
     pprint.pprint(checked_servers)
+    print("Writing to BUS on {}".format(channelid))
     writeToBus(checked_servers, channelid)
 
 
-    return
+    return("Finished")
 
 
 #main('h86eK4Ds')
