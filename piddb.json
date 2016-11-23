@@ -1,0 +1,1 @@
+{"_default": {"2": {"ID": "8,31", "objtype": "servermodel", "server_type": "B", "SERVER_MODEL": "Cisco UCS B200 M3", "pid": "UCSB-B200-M3"}, "3": {"ID": "13", "objtype": "processor", "PROCESSOR": "Intel Xeon E5-2600 Series processors", "pid": "UCS-CPU-E5-2680"}, "4": {"adapter": "Cisco UCS VIC 1240", "objtype": "adapter", "pid": "UCSB-MLOM-40G-01"}}}
