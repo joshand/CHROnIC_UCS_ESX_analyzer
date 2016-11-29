@@ -179,6 +179,7 @@ def collectServerInfo(channelid):
 
     for item in response:
         msgresp = item['msgresp']
+        msgresp = base64.b64decode(bytes(msgresp, "utf-8")).decode("ascii")
         msgresp = ast.literal_eval(msgresp)
         if 'ucs' in msgresp.keys():
             ucs_servers = msgresp['ucs']
