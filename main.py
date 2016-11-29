@@ -11,6 +11,7 @@ import requests
 import json
 import ast
 import os
+import base64
 
 app = FlaskAPI(__name__)
 
