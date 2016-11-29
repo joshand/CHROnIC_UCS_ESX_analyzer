@@ -180,10 +180,10 @@ def collectServerInfo(channelid):
 
     for item in response:
         msgresp = item['msgresp']
-        msgresp = ast.literal_eval(msgresp)
-        if 'ucs' in msgresp.keys():
+        #msgresp = ast.literal_eval(msgresp)
+        if 'ucs' in msgresp:
             ucs_servers = base64.b64decode(bytes(msgresp['ucs'], "utf-8")).decode("ascii")
-        elif 'vcenter' in msgresp.keys():
+        elif 'vcenter' in msgresp:
             esx_servers = base64.b64decode(bytes(msgresp['vcenter'], "utf-8")).decode("ascii")
 
 
