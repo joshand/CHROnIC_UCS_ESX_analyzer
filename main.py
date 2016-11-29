@@ -227,7 +227,7 @@ def writeToBus(checked_servers, channelid):
 def hc():
     return("Healthy")
 
-@app.route("/api/<channelid>", methods=['GET'])
+@app.route("/api/<channelid>", methods=['GET','POST'])
 def main(channelid):
     #channelid = request.data['channelid']
     formatted_servers = collectServerInfo(channelid)
