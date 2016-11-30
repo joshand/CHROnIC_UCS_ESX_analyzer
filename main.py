@@ -11,6 +11,7 @@ import requests
 import json
 import ast
 import os
+import base64
 
 app = FlaskAPI(__name__)
 
@@ -174,18 +175,27 @@ def collectServerInfo(channelid):
         'cache-control': "no-cache",
     }
 
+    print("collectServerInfo:", url)
     response = requests.request("GET", url, headers=headers).json()
+    #print(response)
 
-
+    ucs_servers = ""
+    esx_servers = ""
     for item in response:
         msgresp = item['msgresp']
-        msgresp = ast.literal_eval(msgresp)
-        if 'ucs' in msgresp.keys():
+        if msgresp != "":
+            msgresp = base64.b64decode(bytes(msgresp, "utf-8")).decode("ascii")
+            msgresp = eval(msgresp)
+            #msgresp = ast.literal_eval(msgresp)
+        #print(msgresp)
+        if 'ucs' in msgresp:
             ucs_servers = msgresp['ucs']
-        elif 'vcenter' in msgresp.keys():
+        elif 'vcenter' in msgresp:
             esx_servers = msgresp['vcenter']
+        #print("Pass")
 
-
+    print(ucs_servers)
+    print(esx_servers)
     return({'ucs_servers':ucs_servers, 'esx_servers':esx_servers})
 
 
@@ -236,9 +246,17 @@ def main(channelid):
     print("Writing to BUS on {}".format(channelid))
     writeToBus(checked_servers, channelid)
 
-
     return("Finished")
 
+@app.route("/api/<channelid>", methods=['POST'])
+def main_post(channelid):
+    print("It's a POST:", channelid)
+    #redirect to regular GET, this route was added in case differental handling was needed.
+    #if a POST is received where the status != 2, that POST should be ignored. Here is
+    # the body that would be sent: {"status": "1", "id": "2"}
+    #This type of POST should be processed: {"status": "2", "id": "2"}
+    main(channelid)
+    return("Finished")
 
 #main('h86eK4Ds')
 
@@ -246,5 +264,5 @@ def main(channelid):
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
-
+    #app.run(host='0.0.0.0', port=5002, debug=True)
 

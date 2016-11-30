@@ -2,7 +2,7 @@
     "container": {
         "type": "DOCKER",
         "docker": {
-            "image": "chapeter/chronic-ucs-esx-analyzer:latest",
+            "image": "joshand/chronic_ucs_esx_analyzer:latest",
             "forcePullImage": true,
             "network": "BRIDGE",
             "portMappings": [{
@@ -16,10 +16,12 @@
         "protocol": "TCP",
         "portIndex": 0
     }],
-    "id": "/imapex/chronic/ucs-esx-analyzer",
+    "id": "/imapex/chronic/ucs-esx-analyzer2",
     "instances": 1,
     "cpus": 0.1,
     "mem": 16,
     "env": {
+        "CHRONICBUS": "http://imapex-chronic-bus.green.browndogtech.com",
+        "HCL": "http://ucshcltool.cloudapps.cisco.com/public/rest"
     }
 }
