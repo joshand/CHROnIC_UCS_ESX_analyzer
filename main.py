@@ -232,8 +232,19 @@ def writeToBus(checked_servers, channelid):
     print(response)
     return
 
-def statusCheck():
+def updateStatus(channelid):
+    url = busbaseurl + "/api/get/{}/2".format(channelid)
+    response = requests.request("GET", url).json()
+    ids = []
+    for item in response:
+        ids.append(item['id'])
 
+    for id in ids:
+        url = busbaseurl + "/api/status/{}".format(id)
+        payload = {'status':'3'}
+        headers = {'content-type': "application/json"}
+        response = requests.request("POST", url, data=json.dumps(payload), headers=headers)
+        print(("changing message {} to 3").format(id), response)
     return
 
 @app.route("/")
@@ -255,21 +266,16 @@ def main(channelid):
 @app.route("/api/<channelid>", methods=['POST'])
 def main_post(channelid):
     print("It's a POST:", channelid)
-    data = request.get_data
-    print(data)
-    data = base64.b64decode(bytes(data, "utf-8")).decode("ascii")
-    print(data)
-    def(data)
+    print("json" ,request.get_json())
+    data = request.get_json()
     if data['status'] == '2':
         main(channelid)
+        updateStatus(channelid)
         return ("Finished")
     else:
         print("job not yet done...not doing anything")
         return("Finished")
-    #redirect to regular GET, this route was added in case differental handling was needed.
-    #if a POST is received where the status != 2, that POST should be ignored. Here is
-    # the body that would be sent: {"status": "1", "id": "2"}
-    #This type of POST should be processed: {"status": "2", "id": "2"}
+
     return("Finished")
 
 #main('h86eK4Ds')
