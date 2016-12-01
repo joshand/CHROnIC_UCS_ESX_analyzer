@@ -258,7 +258,8 @@ def main_post(channelid):
     data = request.get_data
     print(data)
     data = base64.b64decode(bytes(data, "utf-8")).decode("ascii")
-
+    print(data)
+    def(data)
     if data['status'] == '2':
         main(channelid)
         return ("Finished")
