@@ -255,7 +255,10 @@ def main(channelid):
 @app.route("/api/<channelid>", methods=['POST'])
 def main_post(channelid):
     print("It's a POST:", channelid)
-    data = request.get_data().json()
+    data = request.get_data
+    print(data)
+    data = base64.b64decode(bytes(data, "utf-8")).decode("ascii")
+
     if data['status'] == '2':
         main(channelid)
         return ("Finished")
@@ -274,5 +277,4 @@ def main_post(channelid):
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
-    #app.run(host='0.0.0.0', port=5002, debug=True)
 
