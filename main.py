@@ -232,6 +232,10 @@ def writeToBus(checked_servers, channelid):
     print(response)
     return
 
+def statusCheck():
+
+    return
+
 @app.route("/")
 def hc():
     return("Healthy")
@@ -251,11 +255,17 @@ def main(channelid):
 @app.route("/api/<channelid>", methods=['POST'])
 def main_post(channelid):
     print("It's a POST:", channelid)
+    data = request.get_data().json()
+    if data['status'] == '2':
+        main(channelid)
+        return ("Finished")
+    else:
+        print("job not yet done...not doing anything")
+        return("Finished")
     #redirect to regular GET, this route was added in case differental handling was needed.
     #if a POST is received where the status != 2, that POST should be ignored. Here is
     # the body that would be sent: {"status": "1", "id": "2"}
     #This type of POST should be processed: {"status": "2", "id": "2"}
-    main(channelid)
     return("Finished")
 
 #main('h86eK4Ds')
