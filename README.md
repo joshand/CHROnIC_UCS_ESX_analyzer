@@ -1,4 +1,5 @@
-# CHROnIC UCS ESX Analyzer (UEA)
+# CHROnIC UCS ESX Analyzer
+![logo](https://github.com/imapex/CHROnIC/blob/master/images/CHROnIC_logo_med.png)
 
 Cisco Health Reports and Online Information Center is a plug-able web app to help visualize and maintain device's support by providing various health reports.
 
