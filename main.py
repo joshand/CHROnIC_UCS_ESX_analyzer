@@ -29,17 +29,18 @@ def server_merge(ucs_list, esx_list):
     for esx in esx_list:
         print(esx['driverinfo'])
         esx_ident_list = esx['otherIdentifyingInfo/identifierValue/~']
-        for id in esx_ident_list:
-            for ucs in ucs_list:
-                ucs_serial = ucs['@serial'][0]
-                if id == ucs_serial:
-                    print("Building merged server object.  Matched on esx", id, "ucs", ucs_serial)
-                    server = {}
-                    server['ucs'] = ucs
-                    server['id'] = count
-                    server['esx'] = esx
-                    count = count + 1
-                    servers.append(server)
+        if bool(esx['driverinfo']) == True:
+            for id in esx_ident_list:
+                for ucs in ucs_list:
+                    ucs_serial = ucs['@serial'][0]
+                    if id == ucs_serial:
+                        print("Building merged server object.  Matched on esx", id, "ucs", ucs_serial)
+                        server = {}
+                        server['ucs'] = ucs
+                        server['id'] = count
+                        server['esx'] = esx
+                        count = count + 1
+                        servers.append(server)
     pprint.pprint(servers)
     return servers
 
