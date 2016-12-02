@@ -20,22 +20,34 @@ CHRONICBUS needs to point to the CHROnIC Bus instance's base URL
 CHRONICBUS
 ```
 
+CHRONICPORTAL needs to point to the CHROnIC Portal instance's base URL
+```
+CHRONICPORTAL
+```
+
 HCL needs to point to one of Cisco's HCL tool URL's.  ex: http://ucshcltool.cloudapps.cisco.com/public/rest
 ```
 HCL
 ```
 
 
-## Downloading
-
-```
-docker pull chapeter/chronic-ucs-esx-analyzer
-```
 
 # Usage
-
+## python
 ```
-docker run -d -e "CHRONICBUS=<url>" -e "HCL=<url>" chapeter/chronic-ucs-esx-analyzer
+pip install -r requirements.txt
+export CHRONICBUS=<bus url>
+export CHRONICPORTAL=<portal url>
+export HCL=<hcl url>
+python3 main.py
+```
+
+or
+
+## Docker
+```
+docker build -t chronic_ucs_esx_analyzer
+docker run -d -p 5000:5000 -e "CHRONICBUS=<bus url>" -e "CHRONICPORTAL=<portal url>" -e "HCL=<hcl url>" chronic_ucs_esx_analyzer
 ```
 
 # Compatibility
@@ -54,3 +66,8 @@ Supported Adapters:
 
 Supported OS:
 * VMware ESX (unknown if update versions run correctly)
+
+# Suggested Next steps
+* Change from TinyDB to a simple YAML file
+* Add more pid to HCL descriptions
+* Add better error handeling

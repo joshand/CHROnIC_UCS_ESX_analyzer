@@ -11,6 +11,7 @@ import requests
 import json
 import ast
 import os
+import base64
 
 app = FlaskAPI(__name__)
 
@@ -174,18 +175,27 @@ def collectServerInfo(channelid):
         'cache-control': "no-cache",
     }
 
+    print("collectServerInfo:", url)
     response = requests.request("GET", url, headers=headers).json()
+    #print(response)
 
-
+    ucs_servers = ""
+    esx_servers = ""
     for item in response:
         msgresp = item['msgresp']
-        msgresp = ast.literal_eval(msgresp)
-        if 'ucs' in msgresp.keys():
+        if msgresp != "":
+            msgresp = base64.b64decode(bytes(msgresp, "utf-8")).decode("ascii")
+            msgresp = eval(msgresp)
+            #msgresp = ast.literal_eval(msgresp)
+        #print(msgresp)
+        if 'ucs' in msgresp:
             ucs_servers = msgresp['ucs']
-        elif 'vcenter' in msgresp.keys():
+        elif 'vcenter' in msgresp:
             esx_servers = msgresp['vcenter']
+        #print("Pass")
 
-
+    print(ucs_servers)
+    print(esx_servers)
     return({'ucs_servers':ucs_servers, 'esx_servers':esx_servers})
 
 
@@ -222,6 +232,21 @@ def writeToBus(checked_servers, channelid):
     print(response)
     return
 
+def updateStatus(channelid):
+    url = busbaseurl + "/api/get/{}/2".format(channelid)
+    response = requests.request("GET", url).json()
+    ids = []
+    for item in response:
+        ids.append(item['id'])
+
+    for id in ids:
+        url = busbaseurl + "/api/status/{}".format(id)
+        payload = {'status':'3'}
+        headers = {'content-type': "application/json"}
+        response = requests.request("POST", url, data=json.dumps(payload), headers=headers)
+        print(("changing message {} to 3").format(id), response)
+    return
+
 @app.route("/")
 def hc():
     return("Healthy")
@@ -236,9 +261,22 @@ def main(channelid):
     print("Writing to BUS on {}".format(channelid))
     writeToBus(checked_servers, channelid)
 
-
     return("Finished")
 
+@app.route("/api/<channelid>", methods=['POST'])
+def main_post(channelid):
+    print("It's a POST:", channelid)
+    print("json" ,request.get_json())
+    data = request.get_json()
+    if data['status'] == '2':
+        main(channelid)
+        updateStatus(channelid)
+        return ("Finished")
+    else:
+        print("job not yet done...not doing anything")
+        return("Finished")
+
+    return("Finished")
 
 #main('h86eK4Ds')
 
@@ -246,5 +284,4 @@ def main(channelid):
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
-
 

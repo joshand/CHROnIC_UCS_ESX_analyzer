@@ -4,3 +4,7 @@
 __pycache__/
 drone_secrets.yml
 drone_secrets.yml.example
+drone-secrets.yml
+ds.sh
+app_install.sh
+app_uninstall.sh

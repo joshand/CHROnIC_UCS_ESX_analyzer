@@ -6,7 +6,7 @@ build:
 
 publish:
     docker:
-        repo: $$DOCKER_USERNAME/chronic-ucs-esx-analyzer
+        repo: $$DOCKER_USERNAME/chronic_ucs_esx_analyzer
         tag: latest
         username: $$DOCKER_USERNAME
         password: $$DOCKER_PASSWORD
