@@ -28,7 +28,7 @@ def server_merge(ucs_list, esx_list):
     count = 0
     for esx in esx_list:
         print(esx['driverinfo'])
-        if bool(esx['driverinfo']) == True
+        if bool(esx['driverinfo']) == True:
             esx_ident_list = esx['otherIdentifyingInfo/identifierValue/~']
             for id in esx_ident_list:
                 for ucs in ucs_list:
