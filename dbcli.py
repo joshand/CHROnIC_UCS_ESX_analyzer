@@ -27,7 +27,7 @@ def addServerModel():
           "http://ucshcltool.cloudapps.cisco.com/public/rest/\n")
     server_model = input("Server Model: ")
     id = input("ID: ")
-    objtype = servermodel
+    objtype = 'servermodel'
     server_type = "B"
     pid = input("pid: ")
 
@@ -38,7 +38,7 @@ def addServerModel():
               'pid': pid
               }
     piddb.insert(server)
-    print(Fore.GREEN + "\nSuccessfully inserted Server into DB")
+    print(Fore.GREEN + "\nSuccessfully inserted Server {} into DB".format(server))
     print(Style.RESET_ALL)
 
     return
@@ -111,7 +111,7 @@ while True:
         addAdapter()
     elif user_choice =='99':
         delObject()
-    elif user_choice =='exit':
+    elif user_choice =='quit':
         quit()
     else:
         print("Not a valid choice. Try again")
