@@ -22,6 +22,8 @@ def requestwrapper(method, url, payload, headers):
             if retry > 5:
                 raise e
             retry = retry + 1
+            strerror = e.args
+            print("Exception: " + str(list(strerror)) + " -- Retry #" + str(retry))
             time.sleep(5)
 
     return ret
