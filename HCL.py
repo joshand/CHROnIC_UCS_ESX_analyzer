@@ -2,6 +2,7 @@ import requests
 from tinydb import TinyDB, Query
 from colorama import init, Fore, Back
 import os
+import time
 
 db = TinyDB('testdb.json')
 piddb = TinyDB('piddb.json')
@@ -9,6 +10,21 @@ item = Query()
 init(autoreset=True)
 
 hclbaseurl = os.environ['HCL']
+
+def requestwrapper(method, url, payload, headers):
+    print("Request Wrapper: [" + method + "]:" + url + "\n" + payload + "\n" + headers)
+    retry = 0
+    ret = ""
+    while True:
+        try:
+            ret = requests.request(method, url, data=payload, headers=headers)
+        except Exception as e:
+            if retry > 5:
+                raise e
+            retry = retry + 1
+            time.sleep(5)
+
+    return ret
 
 def checkThenInsert(i):
     """
@@ -29,7 +45,7 @@ def getAdapterType():
     #url = "http://ucshcltool.cloudapps.cisco.com/public/rest/controller/loadAdapterTypes"
     url = hclbaseurl + "/controller/loadAdapterTypes"
 
-    response = requests.request("POST", url).json()
+    response = requestwrapper("POST", url, "", "").json()
     return response
 
 def buildAdapterType():
@@ -53,7 +69,7 @@ def buildAdapterModel(treeIdAdapterType):
 
     payload = "treeIdAdapterType={}".format(treeIdAdapterType)
     headers = {'content-type': "application/x-www-form-urlencoded"}
-    response = requests.request("POST", url, data=payload, headers=headers).json()
+    response = requestwrapper("POST", url, payload, headers).json()
     for i in response:
         i['otype'] = 'adapter'
         i['pid'] = 'unknown'
@@ -82,7 +98,7 @@ def buildOSVenderTable():
     }
     for processor in processors:
         payload = "treeIdProcessor={}".format(processor['T_ID'])
-        oss = requests.request("POST", url, data=payload, headers=headers).json()
+        oss = requestwrapper("POST", url, data=payload, headers=headers).json()
         for os in oss:
             os['otype'] = 'os'
             checkThenInsert(os)
@@ -99,7 +115,7 @@ def getOSVendor(T_ID, reported_os_vendor):
         'postman-token': "25af9eaa-2d3d-0dda-92cc-632db98ec3b1"
     }
 
-    vendors = requests.request("POST", url, data=payload, headers=headers).json()
+    vendors = requestwrapper("POST", url, data=payload, headers=headers).json()
 
     for vendor in vendors:
         if vendor['OSVENDOR'] == reported_os_vendor:
@@ -119,7 +135,7 @@ def buildOSVersions(treeIdVendor):
     headers = {
         'content-type': "application/x-www-form-urlencoded",
     }
-    response = requests.request("POST", url, data=payload, headers=headers).json()
+    response = requestwrapper("POST", url, data=payload, headers=headers).json()
     for i in response:
         i['otype'] = 'osversion'
         checkThenInsert(i)
@@ -134,7 +150,7 @@ def getOSVersion(T_ID, reported_version):
         'content-type': "application/x-www-form-urlencoded"
     }
 
-    versions = requests.request("POST", url, data=payload, headers=headers).json()
+    versions = requestwrapper("POST", url, data=payload, headers=headers).json()
     for version in versions:
         if version['OSVERSION'] == reported_version:
             return version
@@ -144,7 +160,7 @@ def getOSVersion(T_ID, reported_version):
 
 def buildOSVersionTable():
     '''
-    This funciton triggers the full build process for getting and storing all OS versions
+    This function triggers the full build process for getting and storing all OS versions
     '''
     OSVenders = db.search(item.otype == 'osvender')
     for os in OSVenders:
@@ -155,7 +171,7 @@ def getServerTypes():
     #url = "http://ucshcltool.cloudapps.cisco.com/public/rest/server/loadServerTypes"
     url = hclbaseurl + "/server/loadServerTypes"
 
-    response = requests.request("POST", url).json()
+    response = requestwrapper("POST", url, "", "").json()
     return response
 
 def getServerType(server_type):
@@ -180,7 +196,7 @@ def getServerModels(treeIdRelease):
     headers = {
     'content-type': "application/x-www-form-urlencoded",
     }
-    response = requests.request("POST", url, data=payload, headers=headers).json()
+    response = requestwrapper("POST", url, data=payload, headers=headers).json()
 
     return response
 
@@ -216,7 +232,7 @@ def buildProcessorsTable():
 
     for server in server_models:
         payload = "treeIdServerModel={}".format(server['T_ID'])
-        processors = requests.request("POST", url, data=payload, headers=headers).json()
+        processors = requestwrapper("POST", url, data=payload, headers=headers).json()
         for processor in processors:
             processor['otype'] = 'processor'
             processor['pid'] = 'unknown'
@@ -229,7 +245,7 @@ def getProcessor(T_ID, PROCESSOR):
 
     headers = {'content-type': "application/x-www-form-urlencoded",}
     payload = "treeIdServerModel={}".format(T_ID)
-    processors = requests.request("POST", url, data=payload, headers=headers).json()
+    processors = requestwrapper("POST", url, data=payload, headers=headers).json()
 
     for processor in processors:
         if processor['PROCESSOR'] == PROCESSOR:
@@ -247,7 +263,7 @@ def getFirmware(T_ID, reported_firmware):
         'postman-token': "dc4e4f4c-f156-78d8-a8e5-a8d872d627db"
     }
 
-    firmwares = requests.request("POST", url, data=payload, headers=headers).json()
+    firmwares = requestwrapper("POST", url, data=payload, headers=headers).json()
     for firmware in firmwares:
         if firmware['VERSION'] == reported_firmware:
             return firmware
@@ -274,7 +290,7 @@ def hclSearch(serverType_ID, serverModel_ID, processor_ID, osVendor_ID, osVersio
         'content-type': "application/x-www-form-urlencoded"
         }
 
-    response = requests.request("POST", url, data=payload, headers=headers).json()
+    response = requestwrapper("POST", url, data=payload, headers=headers).json()
 
     return response
 
