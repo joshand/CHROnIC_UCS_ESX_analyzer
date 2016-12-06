@@ -3,4 +3,4 @@ requests
 colorama
 Flask
 Flask_api
-httplib
+httplib2
