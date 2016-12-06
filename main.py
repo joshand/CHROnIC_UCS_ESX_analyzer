@@ -65,13 +65,24 @@ def buildHCL_processor_name(processorFull):
         if "v2" in processorFull:
             print(processorFull, "is a Intel Xeon E5-2600 v2 Series processors")
             return "Intel Xeon E5-2600 v2 Series processors"
+        elif "v3" in processorFull:
+            return "Intel Xeon E5-2600 v3 Series processors"
+        elif "v4" in processorFull:
+            return "Intel Xeon E5-2600 v4 Series processors"
         else:
             print(processorFull, "is a Intel Xeon E5-2600 Series processors")
             return "Intel Xeon E5-2600 Series processors"
+    elif "E7- 48" in processorFull:
+        return "Intel Xeon E7-4800 v4 Series processors"
+    elif "E7- 88" in processorFull:
+        return "Intel Xeon E7-8800 v4 Series processors"
+    elif "E7- 28" in processorFull:
+        return "Intel Xeon E7-2800 Series processors"
+    elif "X56" in processorFull:
+        return "Intel Xeon 5600 Series processors"
     else:
         print("unsupported processor")
         return "UNSUPPORTED"
-
 
 def buildHCL_firmware_name(firmware):
     print("Formating firmware name from, " + firmware + " to " + firmware[:5] + ")")
