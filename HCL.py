@@ -3,7 +3,7 @@ from tinydb import TinyDB, Query
 from colorama import init, Fore, Back
 import os
 import time
-import httplib
+import httplib2
 
 db = TinyDB('testdb.json')
 piddb = TinyDB('piddb.json')
