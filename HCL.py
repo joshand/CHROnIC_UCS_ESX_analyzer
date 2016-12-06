@@ -253,7 +253,7 @@ def getFirmware(T_ID, reported_firmware):
             return firmware
 
     ##TODO return error code - running unsupported firmware
-    return
+    return "UNSUPPORTED"
 
 
 def getServerType_PID(pid):
